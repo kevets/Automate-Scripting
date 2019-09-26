@@ -2,7 +2,7 @@
 # enter desired code in curly brackets and run .\mater.ps1
 # to generate your .bat launcher. Password is not stored in a secure format.
 #######################################################
-$code =
+$code_src =
 {
 # SET DESIRED PASSWORD AND TARGET USER FOR SCRIPT EXECUTION HERE
 $password = 'changeme'
@@ -14,6 +14,7 @@ $cred = new-object System.Management.Automation.PSCredential $tgt,$securePwd
 return $output
 }
 
-$code = [convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($code))
-set-content -path mater.bat -value ("powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand " + $code)
-set-content -path mater.src [convert]::FromBase64String([Text.Encoding]::Unicode.GetBytes($code))
+$code_enc = [convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($code_src))
+set-content -path mater.bat -value ("powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand " + $code_enc)
+$code_dec = [Text.Encoding]::UTF8.GetString([convert]::FromBase64String($code_enc))
+set-content -path mater.src -value ($code_dec)

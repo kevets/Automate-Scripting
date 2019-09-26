@@ -1,0 +1,10 @@
+
+# SET DESIRED PASSWORD AND TARGET USER FOR SCRIPT EXECUTION HERE
+$password = 'changeme'
+$tgt = 'changeme'
+$securePwd = ConvertTo-SecureString $password -AsPlainText -Force
+$cred = new-object System.Management.Automation.PSCredential $tgt,$securePwd
+#EXAMPLE OPENS SYSTEM HOSTS FILE
+[string]$output=Start-Process PowerShell -Cred $cred -ArgumentList '-noprofile -command &(Start-Process "c:\windows\system32\notepad.exe c:\windows\system32\drivers\etc\hosts" -verb runas)'
+return $output
+
