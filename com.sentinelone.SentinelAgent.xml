@@ -1,0 +1,40 @@
+<key>PayloadUUID</key>
+        <string>C4E6A782-0C8D-44AB-A025-EB893987A298</string>
+        <key>PayloadType</key>
+        <string>Configuration</string>
+        <key>PayloadOrganization</key>
+        <string>SentinelOne</string>
+        <key>PayloadIdentifier</key>
+        <string>C4E6A782-0C8D-44AB-A025-EB893987A298</string>
+        <key>PayloadDisplayName</key>
+        <string>com.sentinelone.SentinelAgent settings</string>
+        <key>PayloadDescription</key>
+        <string>com.sentinelone.SentinelAgent configuration settings</string>
+        <key>PayloadVersion</key>
+        <integer>1</integer>
+        <key>PayloadEnabled</key>
+        <true/>
+        <key>PayloadRemovalDisallowed</key>
+        <true/>
+        <key>PayloadScope</key>
+        <string>System</string>
+        <key>PayloadContent</key>
+        <array>
+			<dict>
+				<key>SystemPolicyAllFiles</key>
+				<array>
+					<dict>
+						<key>Authorization</key>
+						<string>Allow</string>
+						<key>CodeRequirement</key>
+						<string>anchor apple generic and identifier "com.sentinelone.SentinelAgent" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "4AYE5J54KN")</string>
+						<key>Comment</key>
+						<string></string>
+						<key>Identifier</key>
+						<string>com.sentinelone.SentinelAgent</string>
+						<key>IdentifierType</key>
+						<string>bundleID</string>
+					</dict>
+				</array>
+			</dict>
+        </array>

@@ -8,3 +8,9 @@ $cred = new-object System.Management.Automation.PSCredential $tgt,$securePwd
 [string]$output=Start-Process PowerShell -Cred $cred -ArgumentList '-noprofile -command &(Start-Process "c:\windows\system32\notepad.exe c:\windows\system32\drivers\etc\hosts" -verb runas)'
 return $output
 
+https://teams.microsoft.com/l/meetup-join/19:meeting_YTFjMzFmYTEtYmU5OS00NjUyLWFlOTYtM2ZmZmY0ZjQyMWY1@thread.v2/0?context=%7B%22Tid%22:%226c27e776-a291-48fe-b77c-10aaf9b743bc%22,%22Oid%22:%2227bdae20-a860-4c16-96c9-f48c54b51dab%22%7D
+https://teams.microsoft.com/l/meetup-join/19:meeting_ZTI3ZThiMDgtOTYyYy00OThiLTkzNjMtOTMzYThlMzBkOTg2@thread.v2/0?context=%7B%22Tid%22:%226c27e776-a291-48fe-b77c-10aaf9b743bc%22,%22Oid%22:%2227bdae20-a860-4c16-96c9-f48c54b51dab%22%7D
+
+CDCG.org
+
+Get-WinEvent -LogName 'Microsoft-Windows-PrintService/Admin' | Select-String -InputObject {$_.message} -Pattern 'The print spooler failed to load a plug-in module'
