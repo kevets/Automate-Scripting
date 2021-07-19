@@ -1,3 +1,4 @@
+#$method = 'set'
 $TestResult = $true
 # Configure Sonicwall Global VPN Profile
 # Identifies if default profile is not set(could improve to compare to uploaded file and auto fix)
@@ -12,8 +13,15 @@ if (!(get-childitem $DefaultFile -ErrorAction silentlycontinue))
     Write-Warning 'Default connection profile not set!'
     $TestResult = $false
 }
+else
+{
+    Write-Warning 'Default connection profile set! Comparing files...'    
+    if (!(compare-object (get-filehash $ConnectionFile).hash (get-filehash $DefaultFile).hash))
+    { Write-Warning 'Default connection profile match!'  }
+    else {   Write-Warning 'ERR: Default connection profile not matching...';  $TestResult = $false  }
+}
 # You may add multiple tests
-$TestResult
+#$TestResult
 
 
 
