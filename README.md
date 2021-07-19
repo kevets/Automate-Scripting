@@ -1,15 +1,23 @@
 # Automate-Scripting
 A collection of helper scripts or solutions used in automations to serve MSP clients
 
+Configure-SonicwallGlobalVPNProfile.ps1
+Automation script for populating default connection profiles for Sonicwall Global VPN Client
+
 Remove-SentinelOne
 curl https://raw.githubusercontent.com/kevets/Automate-Scripting/master/Remove-SentinelOne.sh 
 
 
 Needed:
 Command line check for macosx agent status
+Company Portal app check
 
 View commands
 sudo /Library/Sentinel/sentinel-agent.bundle/Contents/MacOS/sentinelctl help
+sudo /Library/Sentinel/sentinel-agent.bundle/Contents/MacOS/sentinelctl restart
+sudo /Library/Sentinel/sentinel-agent.bundle/Contents/MacOS/sentinelctl status
+
+
 
 sudo ls -l /Library/Sentinel/sentinel-agent.bundle
 
@@ -23,6 +31,19 @@ drwxr-xr-x  3 root  wheel      96 Jun 30 10:39 sentineld.app
 drwxr-xr-x  3 root  wheel      96 Jun 30 10:39 sentineld_helper.app
 -rwxr-xr-x  1 root  wheel  232960 May  4 13:41 sentineld_shell
 -rwxr-xr-x  1 root  wheel  268880 May  4 13:41 sentineld_updater
+
+
+Agent
+   Version:                 21.5.3.5411
+   Install Date:            6/28/21, 9:43:21 AM
+   Missing Authorizations:  com.sentinelone.sentineld-helper; com.sentinelone.sentineld; com.sentinelone.sentinel-shell
+   ES Framework:            needs authorization (check the documentation)
+   FW Extension:            indeterminate
+   Ready:                   no
+   Protection:              enabled
+   Infected:                no
+   Network Quarantine:      no
+
 
 Agent
    Version:                 21.5.3.5411
