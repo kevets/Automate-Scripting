@@ -1,4 +1,3 @@
-#$method = 'set'
 $TestResult = $true
 # Configure Sonicwall Global VPN Profile
 # Identifies if default profile is not set(could improve to compare to uploaded file and auto fix)
