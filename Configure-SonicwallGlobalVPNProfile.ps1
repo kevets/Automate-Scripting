@@ -4,6 +4,9 @@ $TestResult = $true
 # Sets the DefaultFile path to the desired profile
 # Flushes user level profiles, forcing defaults to be used
 
+# DESIGNED FOR IMMYBOT
+# $ConnectionFile is expected to be set to the path of the desired configuration file
+
 $DefaultFile = 'C:\Program Files\SonicWall\Global VPN Client\Default.rcf'
 $UserData = 'C:\Users\*\AppData\Roaming\SonicWALL\Global VPN Client'
 
@@ -38,12 +41,16 @@ switch ($method) {
     }
     "get" {
         # You can return anything from here, used when in "Monitor" mode
+        $RCFFileName = "$(Join-Path $env:APPDATA 'SonicWALL\Global VPN Client\Connections.rcf')"
+        [xml]$RCFFile = Get-Content $RCFFileName -Encoding Unicode
+        $Connections = $RCFFile.SW_Client_Policy.Connections.Connection
+        $ConnectionsCount = ($Connections | Measure-Object).Count
+        "$ConnectionsCount connection$(if($ConnectionsCount -ne 1){'s'}) defined"
+        $Connections | Sort-Object -Property Name | Select-Object @{N="Name";E={"$($_.Name)"}},@{N="HostName";E={"$($_.Peer.HostName)"}}
         if (!$DefaultFile)
         {
             Write-Warning 'Default connection profile not set!'
-            $TestResult = $false
         }
-        # You may add multiple tests
         return $TestResult
     }
 }
