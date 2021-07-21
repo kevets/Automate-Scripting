@@ -16,9 +16,8 @@ else
 {
     if ((compare-object (get-filehash $ExpectedHashPath).hash $ExpectedHash))
     {
-        Write-Warning "Path found! Hash does not match..."
+        Write-Warning "Path found! Hash does not match... expecting $ExpectedHash"
         (get-filehash $ExpectedHashPath).hash
-        $ExpectedHash
         $TestResult = $false
     }
 }
