@@ -1,3 +1,4 @@
+# Install-MspPatch.ps1
 # Install MSP patch
 # IMMYBOT PARAMERTERS
 # $ExpectedHash is Hash of ExpectedHashPath
@@ -6,11 +7,20 @@
 
 $TestResult = $true
 
-if (!(compare-object (get-filehash $ExpectedHashPath).hash $ExpectedHash))
-
+if (!(get-childitem $ExpectedHashPath -ErrorAction silentlycontinue))
 {
-    Write-Warning "Expected Hash not found"
+    Write-Warning "Expected Path $ExpectedHashPath not found!"
     $TestResult = $false
+}
+else
+{
+    if ((compare-object (get-filehash $ExpectedHashPath).hash $ExpectedHash))
+    {
+        Write-Warning "Path found! Hash does not match..."
+        (get-filehash $ExpectedHashPath).hash
+        $ExpectedHash
+        $TestResult = $false
+    }
 }
 
 switch ($method) {
@@ -23,6 +33,12 @@ switch ($method) {
         return
     }
     "set" {
+
+        if (!(get-childitem $ExpectedHashPath -ErrorAction silentlycontinue))
+        {
+            Write-Warning "PreCheck Expected Path $ExpectedHashPath not found! Check for missing dependencies..."
+            return $false
+        }
         $InstallerLogFile = New-TemporaryFile
         $Arguments = @"
 /c msiexec /p "$PatchFile" /qn
@@ -38,6 +54,12 @@ switch ($method) {
                 Write-Host "Exit code does not indicate success"
                 Get-Content $InstallerLogFile -ErrorAction SilentlyContinue | select -Last 50
             }
+        }
+        if ((compare-object (get-filehash $ExpectedHashPath).hash $ExpectedHash))
+        { Write-Warning "PostCheck Hash does not match post install..."
+            (get-filehash $ExpectedHashPath).hash
+            $ExpectedHash
+            return $TestResult = $false
         }
         return $Process.ExitCode
     }
