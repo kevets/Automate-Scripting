@@ -4,6 +4,7 @@
 # $ExpectedHash is Hash of ExpectedHashPath
 # $ExpectedHashPath is Path to test post install for validation
 # $PatchFile is Installed with msiexec /p
+# $DependentSoftware is Software name to use for install validation. Should match filter script
 
 $TestResult = $true
 
@@ -17,7 +18,6 @@ else
     if ((compare-object (get-filehash $ExpectedHashPath).hash $ExpectedHash))
     {
         Write-Warning "Path found! Hash does not match... expecting $ExpectedHash"
-        (get-filehash $ExpectedHashPath).hash
         $TestResult = $false
     }
 }
@@ -27,15 +27,14 @@ switch ($method) {
         return $TestResult
     }
     "get" {
-        (get-filehash $ExpectedHashPath).hash
-        $ExpectedHash
+        Write-Host "Expecting: $ExpectedHash"
+        Write-Host "Found: "(get-filehash $ExpectedHashPath).hash
         return
     }
     "set" {
-
-        if (!(get-childitem $ExpectedHashPath -ErrorAction silentlycontinue))
-        {
-            Write-Warning "PreCheck Expected Path $ExpectedHashPath not found! Check for missing dependencies..."
+        if ((Get-ChildItem "HKLM:Software\Microsoft\Windows\CurrentVersion\Uninstall") | Where-Object { $_."Name" -like "$DependentSoftware*" })
+        { 
+            Write-Warning "Dependent Software $DependentSoftware not found!"
             return $false
         }
         $InstallerLogFile = New-TemporaryFile
