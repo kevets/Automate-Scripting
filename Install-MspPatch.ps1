@@ -1,12 +1,20 @@
 # Install-MspPatch.ps1
-# Install MSP patch
-# IMMYBOT PARAMERTERS
+#
+# IMMYBOT PARAMETERS
 # $ExpectedHash is Hash of ExpectedHashPath
 # $ExpectedHashPath is Path to test post install for validation
 # $PatchFile is Installed with msiexec /p
 # $DependentSoftware is Software name to use for install validation. Should match filter script
 
 $TestResult = $true
+
+$src = Get-ChildItem "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*\","HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*\" | Get-Item | Get-ItemProperty |Where-Object -FilterScript {$_.DisplayName -ne $null}|Select-Object @{N='Name'; E={$_.DisplayName}}, @{N='Version'; E={$_.DisplayVersion}} | Where-Object -FilterScript {$_.Name -like "$DependentSoftware*"}
+
+if ((($src).Name).count -eq 0)
+{ 
+    Write-Warning "Dependent Software $DependentSoftware not found!"
+    $TestResult = $false
+}
 
 if (!(get-childitem $ExpectedHashPath -ErrorAction silentlycontinue))
 {
@@ -28,13 +36,18 @@ switch ($method) {
     }
     "get" {
         Write-Host "Expecting: $ExpectedHash"
-        Write-Host "Found: "(get-filehash $ExpectedHashPath).hash
+        if ((($src).Name).count -gt 0) {
+            Write-Host "Hash check: "(get-filehash $ExpectedHashPath).hash
+            Write-Host "Software found: $src"
+        }
+
         return
     }
-    "set" {
-        if ((Get-ChildItem "HKLM:Software\Microsoft\Windows\CurrentVersion\Uninstall") | Where-Object { $_."Name" -like "$DependentSoftware*" })
+    "set" 
+    {
+        if ((($src).Name).count -eq 0)
         { 
-            Write-Warning "Dependent Software $DependentSoftware not found!"
+            Write-Warning "Exiting..."
             return $false
         }
         $InstallerLogFile = New-TemporaryFile
@@ -50,14 +63,14 @@ switch ($method) {
             1641 { Write-Host "Success. Installer has initiated a reboot" }
             default {
                 Write-Host "Exit code does not indicate success"
-                Get-Content $InstallerLogFile -ErrorAction SilentlyContinue | select -Last 50
+                Get-Content $InstallerLogFile -ErrorAction SilentlyContinue | select-object -Last 50
             }
         }
         if ((compare-object (get-filehash $ExpectedHashPath).hash $ExpectedHash))
-        { Write-Warning "PostCheck Hash does not match post install..."
+        { Write-Warning "Post install hash check does not match..."
             (get-filehash $ExpectedHashPath).hash
             $ExpectedHash
-            return $TestResult = $false
+            return $false
         }
         return $Process.ExitCode
     }
