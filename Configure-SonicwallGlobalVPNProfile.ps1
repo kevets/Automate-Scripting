@@ -1,9 +1,7 @@
 $TestResult = $true
-# Configure Sonicwall Global VPN Profile
-# Identifies if default profile is not set(could improve to compare to uploaded file and auto fix)
+# Configure-SonicwallGlobalVPNProfile - Immybot Maintenance Task Script
 # Test (default) mode checks the DefaultFile path
 # Set mode the DefaultFile path to the desired profile
-# Designed for Immybot
 # 08152021 SKing - Intelice Solutions
 
 $DefaultFile = 'C:\Program Files\SonicWall\Global VPN Client\Default.rcf'
