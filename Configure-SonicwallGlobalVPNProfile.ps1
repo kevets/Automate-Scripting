@@ -3,6 +3,8 @@ $TestResult = $true
 # Identifies if default profile is not set(could improve to compare to uploaded file and auto fix)
 # Test (default) mode checks the DefaultFile path
 # Set mode the DefaultFile path to the desired profile
+# Designed for Immybot
+# 08152021 SKing - Intelice Solutions
 
 $DefaultFile = 'C:\Program Files\SonicWall\Global VPN Client\Default.rcf'
 $UserData = 'C:\Users\*\AppData\Roaming\SonicWALL\Global VPN Client'
@@ -44,17 +46,17 @@ switch ($method) {
     }
     "get" {
         # You can return anything from here, used when in "Monitor" mode
-if (!(get-childitem $DefaultFile -ErrorAction silentlycontinue))
-{
-    Write-Warning 'Default connection profile not set!'
-}
-else
-{
-    Write-Warning 'Default connection profile set! Comparing files...'    
-    if (!(compare-object (get-filehash $ConnectionFile).hash (get-filehash $DefaultFile).hash))
-    { Write-Warning 'Default connection profile match!'  }
-    else {   Write-Warning 'ERR: Default connection profile not matching...';  $TestResult = $false  }
-}
+        if (!(get-childitem $DefaultFile -ErrorAction silentlycontinue))
+        {
+            Write-Warning 'Default connection profile not set!'
+        }
+        else
+        {
+            Write-Warning 'Default connection profile set! Comparing files...'    
+            if (!(compare-object (get-filehash $ConnectionFile).hash (get-filehash $DefaultFile).hash))
+            { Write-Warning 'Default connection profile match!'  }
+            else {   Write-Warning 'ERR: Default connection profile not matching...';  $TestResult = $false  }
+        }
         return 1
     }
 }
