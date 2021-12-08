@@ -1,6 +1,9 @@
-#Install-ZipFonts.ps1
+#Install-MacZipFonts.sh
 #
 # DEV - ensure test phase fails until detection is working...
+
+cd ~/Library/Fonts && { curl -O 'https://github.com/bloomberg/scatteract/raw/master/fonts/BRLNSR.TTF' ; cd -; }
+
 $TestResult = $false
 
 
